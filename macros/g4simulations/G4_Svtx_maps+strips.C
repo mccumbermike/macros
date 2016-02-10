@@ -41,11 +41,11 @@ double Svtx(PHG4Reco* g4Reco, double radius,
   // 0 MAPS: 0.3% X_0  (0.053% sensor + 0.247% support) sensor =  50 mc Si, support =  35 mc Cu
   // 1 MAPS: 0.3% X_0  (0.053% sensor + 0.247% support) sensor =  50 mc Si, support =  35 mc Cu
   // 2 MAPS: 0.3% X_0  (0.053% sensor + 0.247% support) sensor =  50 mc Si, support =  35 mc Cu
-  // 2 S0a:  1.0% X_0  (0.257% sensor + 0.743% support) sensor = 240 mc Si, support = 107 mc Cu
-  // 3 S0b:  1.0% X_0  (0.257% sensor + 0.743% support) sensor = 240 mc Si, support = 107 mc Cu
-  // 4 S1a:  0.6% X_0  (0.257% sensor + 0.343% support) sensor = 240 mc Si, support =  49 mc Cu
+  // 3 S0a:  1.0% X_0  (0.257% sensor + 0.743% support) sensor = 240 mc Si, support = 107 mc Cu
+  // 4 S0b:  1.0% X_0  (0.257% sensor + 0.743% support) sensor = 240 mc Si, support = 107 mc Cu
   // 5 S1a:  0.6% X_0  (0.257% sensor + 0.343% support) sensor = 240 mc Si, support =  49 mc Cu
-  // 6 S2:   1.0% X_0  (0.342% sensor + 0.658% support) sensor = 320 mc Si, support =  95 mc Cu
+  // 6 S1a:  0.6% X_0  (0.257% sensor + 0.343% support) sensor = 240 mc Si, support =  49 mc Cu
+  // 7 S2:   1.0% X_0  (0.342% sensor + 0.658% support) sensor = 320 mc Si, support =  95 mc Cu
   //=======================================================================================================
 
   double si_thickness[8] = {0.0050, 0.0050, 0.0050, 0.0240, 0.0240, 0.0240, 0.0240, 0.0320};
