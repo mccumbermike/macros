@@ -20,14 +20,14 @@ void G4Init(bool do_svtx = true,
     }  
   if (do_svtx)
     {
-      gROOT->LoadMacro("G4_Svtx.C");                 // default MIE projections
+      //gROOT->LoadMacro("G4_Svtx.C");                 // default MIE projections
       //gROOT->LoadMacro("G4_Svtx_pixels+strips.C"); // testing
       //gROOT->LoadMacro("G4_Svtx_pixels+tpc.C");    // testing
       //gROOT->LoadMacro("G4_Svtx_maps+strips.C");   // testing
       //gROOT->LoadMacro("G4_Svtx_maps+tpc.C");      // testing
       //gROOT->LoadMacro("G4_Svtx_ladders.C");       // testing
-      //gROOT->LoadMacro("G4_Svtx_maps_7layers.C");  // testing
-      //gROOT->LoadMacro("G4_Svtx_maps_6layers.C");  // testing
+      //gROOT->LoadMacro("G4_Svtx_maps_7layer.C");  // testing
+      gROOT->LoadMacro("G4_Svtx_maps_6layer.C");  // testing
       SvtxInit();
     }
 
