@@ -232,6 +232,7 @@ void Svtx_Reco(int verbosity = 0)
   // Track reconstruction
   //---------------------
   PHG4HoughTransform* hough = new PHG4HoughTransform(6,6);
+  hough->set_mag_field(1.4);
   hough->Verbosity(verbosity);
   // ALICE ITS upgrade values for total thickness in X_0
   hough->set_material(0, 0.003);
@@ -240,7 +241,7 @@ void Svtx_Reco(int verbosity = 0)
   hough->set_material(3, 0.008);
   hough->set_material(4, 0.008);
   hough->set_material(5, 0.008);
-  hough->setPtRescaleFactor(0.995288);
+  hough->setPtRescaleFactor(0.9972);
   hough->set_chi2_cut_init(5.0);
   //hough->set_chi2_cut_fast(60.0,0.0,100.0); // 10.0, 50.0, 75.0
   hough->set_chi2_cut_fast(10.0,50.0,75.0); // 10.0, 50.0, 75.0
