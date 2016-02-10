@@ -348,7 +348,7 @@ void Svtx_Eval(std::string outputfile, int verbosity = 0)
   // SVTX evaluation
   //----------------
 
-  SubsysReco* eval = new SvtxEvaluator("SVTXEVALUATOR", outputfile.c_str());
+  SvtxEvaluator* eval = new SvtxEvaluator("SVTXEVALUATOR", outputfile.c_str());
   eval->Verbosity(verbosity);
   se->registerSubsystem( eval );
 
