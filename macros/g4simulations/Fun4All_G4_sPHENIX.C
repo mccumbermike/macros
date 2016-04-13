@@ -1,7 +1,7 @@
 
 int Fun4All_G4_sPHENIX(
 		       const int nEvents = 10,
-		       const char * inputFile = "/gpfs02/phenix/prod/sPHENIX/preCDR/pro.1-beta.5/single_particle/spacal1d/fieldmap/G4Hits_sPHENIX_e-_eta0_16GeV.root",
+		       const char * inputFile = "/home/mccumber/shijing/sHijing-0-4fm.dat",
 		       const char * outputFile = "G4sPHENIXCells.root"
 		       )
 {
@@ -119,39 +119,52 @@ int Fun4All_G4_sPHENIX(
       // this module is needed to read the HepMC records into our G4 sims
       // but only if you read HepMC input files
       HepMCNodeReader *hr = new HepMCNodeReader();
+      hr->SmearVertex(-0.1,-0.1,-5.0);
       se->registerSubsystem(hr);
     }
   else if (runpythia)
     {
-      gSystem->Load("libPHPythia8.so");
+      if (false) { 
+	gSystem->Load("libPHPythia8.so");
       
-      PHPythia8* pythia8 = new PHPythia8();
-      // see coresoftware/generators/PHPythia8 for example config
-      pythia8->set_config_file("phpythia8.cfg"); 
-      se->registerSubsystem(pythia8);
-
+	PHPythia8* pythia8 = new PHPythia8();
+	// see coresoftware/generators/PHPythia8 for example config
+	pythia8->set_config_file("phpythia8.cfg");
+	pythia8->Verbosity(2);
+	se->registerSubsystem(pythia8);
+      } else {
+	gSystem->Load("libPHPythia.so");
+      
+	PHPythia* pythia = new PHPythia();
+	// see coresoftware/generators/PHPythia8 for example config
+	pythia->set_config_file("phpythia6.cfg"); 
+	pythia->Verbosity(3);
+	se->registerSubsystem(pythia);
+      }
+	
       HepMCNodeReader *hr = new HepMCNodeReader();
+      //hr->SmearVertex(0.0,0.0,-5.0);
       se->registerSubsystem(hr);
     }
   else
     {
       // toss low multiplicity dummy events
       PHG4SimpleEventGenerator *gen = new PHG4SimpleEventGenerator();
-      gen->add_particles("e-",5); // mu+,e+,proton,pi+,Upsilon
-      gen->add_particles("e+",5); // mu-,e-,anti_proton,pi-
+      gen->add_particles("mu-",10); // mu+,e+,proton,pi+,Upsilon
+      gen->add_particles("mu+",10); // mu-,e-,anti_proton,pi-
       if (readhepmc) {
 	gen->set_reuse_existing_vertex(true);
 	gen->set_existing_vertex_offset_vector(0.0,0.0,0.0);
       } else {
 	gen->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
-					       PHG4SimpleEventGenerator::Uniform,
-					       PHG4SimpleEventGenerator::Uniform);
+					      PHG4SimpleEventGenerator::Uniform,
+					      PHG4SimpleEventGenerator::Uniform);
 	gen->set_vertex_distribution_mean(0.0,0.0,0.0);
 	gen->set_vertex_distribution_width(0.0,0.0,5.0);
       }
       gen->set_vertex_size_function(PHG4SimpleEventGenerator::Uniform);
       gen->set_vertex_size_parameters(0.0,0.0);
-      gen->set_eta_range(-0.5, 0.5);
+      gen->set_eta_range(-1.5, 1.5);
       gen->set_phi_range(-1.0*TMath::Pi(), 1.0*TMath::Pi());
       gen->set_pt_range(0.1, 10.0);
       gen->Embed(1);
