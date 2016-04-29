@@ -19,7 +19,8 @@ int Fun4All_G4_sPHENIX(
   const bool readhepmc = false; // read HepMC files
   // Or:
   // Use particle generator
-  const bool runpythia = false;
+  const bool runpythia8 = false;
+  const bool runpythia6 = false;
 
   //======================
   // What to run
@@ -122,7 +123,7 @@ int Fun4All_G4_sPHENIX(
       hr->SmearVertex(-0.05,-0.05,-5.0);
       se->registerSubsystem(hr);
     }
-  else if (runpythia)
+  else if (runpythia8)
     {
       if (true) { 
 	gSystem->Load("libPHPythia8.so");
@@ -144,6 +145,17 @@ int Fun4All_G4_sPHENIX(
 	
       HepMCNodeReader *hr = new HepMCNodeReader();
       hr->SmearVertex(-0.05,-0.05,-5.0);
+      se->registerSubsystem(hr);
+    }
+  else if (runpythia6)
+    {
+      gSystem->Load("libPHPythia6.so");
+
+      PHPythia6 *pythia6 = new PHPythia6();
+      pythia6->set_config_file("phpythia6.cfg");
+      se->registerSubsystem(pythia6);
+
+      HepMCNodeReader *hr = new HepMCNodeReader();
       se->registerSubsystem(hr);
     }
   else
