@@ -160,9 +160,9 @@ void Svtx_Cells(int verbosity = 0)
   // strips are ganged together into a common readout channel
   PHG4SvtxAddConnectedCells *gang = new PHG4SvtxAddConnectedCells();
   gang->Verbosity(verbosity);
-  gang->set_ncells_connected(4,3);
-  gang->set_ncells_connected(5,3);
-  gang->set_ncells_connected(6,6);
+  gang->set_ncells_connected(4,2); // nganged channels - 1
+  gang->set_ncells_connected(5,2);
+  gang->set_ncells_connected(6,5);
   se->registerSubsystem(gang);
   
   return;
@@ -209,8 +209,8 @@ void Svtx_Reco(int verbosity = 0)
   // defaults to 1.0 (fully active)
   PHG4SvtxDeadArea* deadarea = new PHG4SvtxDeadArea();
   deadarea->Verbosity(verbosity);
-  deadarea->set_hit_efficiency(0,0.925);
-  deadarea->set_hit_efficiency(1,0.725);
+  deadarea->set_hit_efficiency(0,0.880 * 0.9); // Run16 live pixels X perfect coverage fraction
+  deadarea->set_hit_efficiency(1,0.705 * 0.9); // 90% is a place holder value
   deadarea->set_hit_efficiency(2,0.98);
   deadarea->set_hit_efficiency(3,0.98);
   deadarea->set_hit_efficiency(4,0.98);
