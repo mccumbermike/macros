@@ -119,18 +119,18 @@ int Fun4All_G4_sPHENIX(
       // this module is needed to read the HepMC records into our G4 sims
       // but only if you read HepMC input files
       HepMCNodeReader *hr = new HepMCNodeReader();
-      hr->SmearVertex(-0.1,-0.1,-5.0);
+      hr->SmearVertex(-0.05,-0.05,-5.0);
       se->registerSubsystem(hr);
     }
   else if (runpythia)
     {
-      if (false) { 
+      if (true) { 
 	gSystem->Load("libPHPythia8.so");
       
 	PHPythia8* pythia8 = new PHPythia8();
 	// see coresoftware/generators/PHPythia8 for example config
 	pythia8->set_config_file("phpythia8.cfg");
-	pythia8->Verbosity(2);
+	pythia8->Verbosity(0);
 	se->registerSubsystem(pythia8);
       } else {
 	gSystem->Load("libPHPythia.so");
@@ -143,7 +143,7 @@ int Fun4All_G4_sPHENIX(
       }
 	
       HepMCNodeReader *hr = new HepMCNodeReader();
-      //hr->SmearVertex(0.0,0.0,-5.0);
+      hr->SmearVertex(-0.05,-0.05,-5.0);
       se->registerSubsystem(hr);
     }
   else
@@ -160,7 +160,7 @@ int Fun4All_G4_sPHENIX(
 					      PHG4SimpleEventGenerator::Uniform,
 					      PHG4SimpleEventGenerator::Uniform);
 	gen->set_vertex_distribution_mean(0.0,0.0,0.0);
-	gen->set_vertex_distribution_width(0.0,0.0,5.0);
+	gen->set_vertex_distribution_width(0.05,0.05,5.0);
       }
       gen->set_vertex_size_function(PHG4SimpleEventGenerator::Uniform);
       gen->set_vertex_size_parameters(0.0,0.0);
