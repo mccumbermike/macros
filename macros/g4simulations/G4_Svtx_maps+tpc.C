@@ -228,7 +228,9 @@ void Svtx_Reco(int verbosity = 0)
   //---------------------
   // Track reconstruction
   //---------------------
-  PHG4HoughTransformTPC* hough = new PHG4HoughTransformTPC(63,56);
+  PHG4HoughTransform* hough = new PHG4HoughTransform(63,56);
+  hough->set_tpc_mode(true);
+
   hough->set_mag_field(1.4);
   hough->set_use_vertex(true);
   hough->setRemoveHits(true);
@@ -240,7 +242,7 @@ void Svtx_Reco(int verbosity = 0)
   hough->setBinScale(1.0);
   hough->setZBinScale(1.0);
 
-  hough->Verbosity(0);
+  hough->Verbosity(3);
   hough->set_material(0, 0.003);
   hough->set_material(1, 0.003);
   hough->set_material(2, 0.003);
@@ -307,16 +309,16 @@ void Svtx_Eval(std::string outputfile, int verbosity = 0)
   // SVTX evaluation
   //----------------
 
-  //SvtxEvaluator* eval = new SvtxEvaluator("SVTXEVALUATOR", outputfile.c_str());
-  //eval->do_cluster_eval(false);
-  //eval->do_g4hit_eval(false);
-  //eval->do_hit_eval(false);
-  //eval->do_gpoint_eval(false);
-  //eval->Verbosity(verbosity);
-  //se->registerSubsystem( eval );
-
-  MomentumEvaluator* eval = new MomentumEvaluator(outputfile.c_str(),0.1,0.2,63,2,56,10.,80.);
+  SvtxEvaluator* eval = new SvtxEvaluator("SVTXEVALUATOR", outputfile.c_str());
+  eval->do_cluster_eval(false);
+  eval->do_g4hit_eval(false);
+  eval->do_hit_eval(false);
+  eval->do_gpoint_eval(false);
+  eval->Verbosity(verbosity);
   se->registerSubsystem( eval );
+
+  //MomentumEvaluator* eval = new MomentumEvaluator(outputfile.c_str(),0.1,0.2,63,2,56,10.,80.);
+  //se->registerSubsystem( eval );
   
   return;
 }
