@@ -1,6 +1,6 @@
 
 int Fun4All_G4_sPHENIX(
-		       const int nEvents = 10,
+		       const int nEvents = 2000,
 		       const char * inputFile = "/home/mccumber/shijing/sHijing-0-4fm.dat",
 		       const char * outputFile = "G4sPHENIXCells.root"
 		       )
@@ -33,7 +33,7 @@ int Fun4All_G4_sPHENIX(
   bool do_svtx = true;
   bool do_svtx_cell = true;
   bool do_svtx_track = true;
-  bool do_svtx_eval = true;
+  bool do_svtx_eval = false;
 
   bool do_preshower = false;
   
@@ -120,7 +120,7 @@ int Fun4All_G4_sPHENIX(
       // this module is needed to read the HepMC records into our G4 sims
       // but only if you read HepMC input files
       HepMCNodeReader *hr = new HepMCNodeReader();
-      hr->SmearVertex(-0.05,-0.05,-5.0);
+      hr->SmearVertex(0.0,0.0,-5.0);
       se->registerSubsystem(hr);
     }
   else if (runpythia8)
@@ -162,8 +162,8 @@ int Fun4All_G4_sPHENIX(
     {
       // toss low multiplicity dummy events
       PHG4SimpleEventGenerator *gen = new PHG4SimpleEventGenerator();
-      gen->add_particles("mu-",10); // mu+,e+,proton,pi+,Upsilon
-      gen->add_particles("mu+",10); // mu-,e-,anti_proton,pi-
+      gen->add_particles("pi-",10); // mu+,e+,proton,pi+,Upsilon
+      gen->add_particles("pi+",10); // mu-,e-,anti_proton,pi-
       if (readhepmc) {
 	gen->set_reuse_existing_vertex(true);
 	gen->set_existing_vertex_offset_vector(0.0,0.0,0.0);
@@ -172,13 +172,13 @@ int Fun4All_G4_sPHENIX(
 					      PHG4SimpleEventGenerator::Uniform,
 					      PHG4SimpleEventGenerator::Uniform);
 	gen->set_vertex_distribution_mean(0.0,0.0,0.0);
-	gen->set_vertex_distribution_width(0.05,0.05,5.0);
+	gen->set_vertex_distribution_width(0.0,0.0,5.0);
       }
       gen->set_vertex_size_function(PHG4SimpleEventGenerator::Uniform);
       gen->set_vertex_size_parameters(0.0,0.0);
       gen->set_eta_range(-1.5, 1.5);
       gen->set_phi_range(-1.0*TMath::Pi(), 1.0*TMath::Pi());
-      gen->set_pt_range(0.1, 10.0);
+      gen->set_pt_range(1.0, 40.0);
       gen->Embed(1);
       gen->Verbosity(0);
       se->registerSubsystem(gen);
@@ -280,6 +280,11 @@ int Fun4All_G4_sPHENIX(
 
   if (do_jet_eval) Jet_Eval("g4jet_eval.root");
 
+  gSystem->Load("libSvtxSimPerformanceCheckReco.so");
+  SvtxSimPerformanceCheckReco *checker = new SvtxSimPerformanceCheckReco();
+  checker->set_nlayers(7);
+  se->registerSubsystem(checker);
+  
   //-------------- 
   // IO management
   //--------------
@@ -350,6 +355,8 @@ int Fun4All_G4_sPHENIX(
   // Exit
   //-----
 
+  se->dumpHistos("svtxcheck.root");
+  
   se->End();
   std::cout << "All done" << std::endl;
   delete se;
