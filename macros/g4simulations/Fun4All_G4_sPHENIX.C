@@ -33,7 +33,7 @@ int Fun4All_G4_sPHENIX(
   bool do_svtx = true;
   bool do_svtx_cell = true;
   bool do_svtx_track = true;
-  bool do_svtx_eval = false;
+  bool do_svtx_eval = true;
 
   bool do_preshower = false;
   
@@ -178,7 +178,7 @@ int Fun4All_G4_sPHENIX(
       gen->set_vertex_size_parameters(0.0,0.0);
       gen->set_eta_range(-1.5, 1.5);
       gen->set_phi_range(-1.0*TMath::Pi(), 1.0*TMath::Pi());
-      gen->set_pt_range(1.0, 40.0);
+      gen->set_pt_range(0.1, 40.0);
       gen->Embed(1);
       gen->Verbosity(0);
       se->registerSubsystem(gen);
