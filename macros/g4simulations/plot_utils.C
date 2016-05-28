@@ -130,13 +130,17 @@ TH1D* get_pattern_eff_nhit(std::string filename, int option) {
   file->cd();  
 
   TH1D* output = NULL;
-  if (option == 0) output = (TH1D*) truept_particles_recoWithExactHits->Clone("patterneff0");
-  else if (option == 1) output = (TH1D*) truept_particles_recoWithin1Hit->Clone("patterneff1");
-  else if (option == 2) output = (TH1D*) truept_particles_recoWithin2Hits->Clone("patterneff2");
-  else cout << "illegal option" << endl;
-
-  //output->Sumw2();
-  //truept_particles_leaving7Hits->Sumw2();
+  if (!inneronly) {
+    if (option == 0) output = (TH1D*) truept_particles_recoWithExactHits->Clone("patterneff0");
+    else if (option == 1) output = (TH1D*) truept_particles_recoWithin1Hit->Clone("patterneff1");
+    else if (option == 2) output = (TH1D*) truept_particles_recoWithin2Hits->Clone("patterneff2");
+    else cout << "illegal option" << endl;
+  } else {
+    if (option == 0) output = (TH1D*) truept_particles_recoWithExactInnerHits->Clone("patterneff0");
+    else if (option == 1) output = (TH1D*) truept_particles_recoWithin1InnerHit->Clone("patterneff1");
+    else if (option == 2) output = (TH1D*) truept_particles_recoWithin2InnerHits->Clone("patterneff2");
+    else cout << "illegal option" << endl;
+  }
   
   output->Divide(truept_particles_leaving7Hits);
   
@@ -170,11 +174,17 @@ TH1D* get_purity_nhit(std::string filename, int option) {
   file->cd();  
 
   TH1D* output = NULL;
-  if (option == 0) output = (TH1D*) recopt_tracks_recoWithExactHits->Clone("purity0");
-  else if (option == 1) output = (TH1D*) recopt_tracks_recoWithin1Hit->Clone("purity1");
-  else if (option == 2) output = (TH1D*) recopt_tracks_recoWithin2Hits->Clone("purity2");
-  else cout << "illegal option" << endl;
-
+  if (!inneronly) {
+    if (option == 0) output = (TH1D*) recopt_tracks_recoWithExactHits->Clone("purity0");
+    else if (option == 1) output = (TH1D*) recopt_tracks_recoWithin1Hit->Clone("purity1");
+    else if (option == 2) output = (TH1D*) recopt_tracks_recoWithin2Hits->Clone("purity2");
+    else cout << "illegal option" << endl;
+  } else {
+    if (option == 0) output = (TH1D*) recopt_tracks_recoWithExactInnerHits->Clone("purity0");
+    else if (option == 1) output = (TH1D*) recopt_tracks_recoWithin1InnerHit->Clone("purity1");
+    else if (option == 2) output = (TH1D*) recopt_tracks_recoWithin2InnerHits->Clone("purity2");
+    else cout << "illegal option" << endl;
+  }
   //output->Sumw2();
   //recopt_tracks_all->Sumw2();
   
@@ -332,6 +342,7 @@ void plot2_markup(TH1D* histo, int option=0) {
 void plot3_markup(TH1D* histo, int option=0) {
   histo->GetXaxis()->SetTitle("true p_{T}");
   histo->GetYaxis()->SetTitle("finding efficiency");
+  if (inneronly) histo->GetYaxis()->SetTitle("inner finding efficiency");
   histo->SetMinimum(0.0);
   histo->SetMaximum(1.1);
   if (option == 1) {
@@ -376,6 +387,7 @@ void plot6_markup(TH1D* histo, int option=0) {
 void plot7_markup(TH1D* histo, int option=0) {
   histo->GetXaxis()->SetTitle("reco p_{T}");
   histo->GetYaxis()->SetTitle("purity");
+  if (inneronly) histo->GetYaxis()->SetTitle("inner purity");
   histo->SetMinimum(0.0);
   histo->SetMaximum(1.1);
   if (option == 1) {

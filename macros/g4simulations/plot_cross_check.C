@@ -1,6 +1,8 @@
 
 #include "plot_utils.C"
 
+bool inneronly = true;
+
 void plot_cross_check(std::string filename = "svtxcheck.root",
 		      std::string refname = "svtxreference.root",
 		      int option = 0,
