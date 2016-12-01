@@ -201,11 +201,11 @@ void Svtx_Cells(int verbosity = 0)
 
   for (int i=0;i<n_svx_layer;++i) {
     svtx_cells->cellsize(i, svxcellsizex[i], svxcellsizey[i]);
-    svtx_cells->set_timing_window(i, -2000.0, +2000.0);
+    svtx_cells->set_timing_window(i, -2000.0, +100.0);
   }
   for (int i=n_svx_layer;i<Max_si_layer;++i) {
     svtx_cells->cellsize(i, tpc_cell_x, tpc_cell_y);
-    svtx_cells->set_timing_window(i, -14000.0, +14000.0);
+    svtx_cells->set_timing_window(i, -18000.0, +18000.0);
   }
   
   se->registerSubsystem(svtx_cells);
@@ -376,7 +376,7 @@ void Svtx_Eval(std::string outputfile, int verbosity = 0)
   eval->do_g4hit_eval(true);
   eval->do_hit_eval(false);
   eval->do_gpoint_eval(false);
-  eval->scan_for_embedded(true);
+  //  eval->scan_for_embedded(true);
   eval->Verbosity(verbosity);
   se->registerSubsystem( eval );
 

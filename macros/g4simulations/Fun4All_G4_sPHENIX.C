@@ -1,8 +1,9 @@
 
 int Fun4All_G4_sPHENIX(
-		       const int nEvents = 10,
-		       const char * inputFile = "/gpfs02/phenix/prod/sPHENIX/preCDR/pro.1-beta.5/single_particle/spacal1d/fieldmap/G4Hits_sPHENIX_e-_eta0_16GeV.root",
-		       const char * outputFile = "G4sPHENIXCells.root"
+		       const int nEvents = 1000,
+		       const char * inputFile = "/home/mccumber/shijing/sHijing-pp.dat",
+		       const char * pileupFile = "/home/mccumber/shijing/sHijing-pp-2.dat",
+		       const char * outputFile = "svtxcheck.root"
 		       )
 {
   //===============
@@ -16,7 +17,7 @@ int Fun4All_G4_sPHENIX(
   const bool readhits = false;
   // Or:
   // read files in HepMC format (typically output from event generators like hijing or pythia)
-  const bool readhepmc = false; // read HepMC files
+  const bool readhepmc = true; // read HepMC files
   // Or:
   // Use particle generator
   const bool runpythia8 = false;
@@ -37,31 +38,31 @@ int Fun4All_G4_sPHENIX(
 
   bool do_preshower = false;
   
-  bool do_cemc = true;
-  bool do_cemc_cell = true;
-  bool do_cemc_twr = true;
-  bool do_cemc_cluster = true;
-  bool do_cemc_eval = true;
+  bool do_cemc = false;
+  bool do_cemc_cell = false;
+  bool do_cemc_twr = false;
+  bool do_cemc_cluster = false;
+  bool do_cemc_eval = false;
 
-  bool do_hcalin = true;
-  bool do_hcalin_cell = true;
-  bool do_hcalin_twr = true;
-  bool do_hcalin_cluster = true;
-  bool do_hcalin_eval = true;
+  bool do_hcalin = false;
+  bool do_hcalin_cell = false;
+  bool do_hcalin_twr = false;
+  bool do_hcalin_cluster = false;
+  bool do_hcalin_eval = false;
 
-  bool do_magnet = true;
+  bool do_magnet = false;
   
-  bool do_hcalout = true;
-  bool do_hcalout_cell = true;
-  bool do_hcalout_twr = true;
-  bool do_hcalout_cluster = true;
-  bool do_hcalout_eval = true;
+  bool do_hcalout = false;
+  bool do_hcalout_cell = false;
+  bool do_hcalout_twr = false;
+  bool do_hcalout_cluster = false;
+  bool do_hcalout_eval = false;
   
-  bool do_global = true;
+  bool do_global = false;
   bool do_global_fastsim = false;
   
-  bool do_jet_reco = true;
-  bool do_jet_eval = true;
+  bool do_jet_reco = false;
+  bool do_jet_eval = false;
 
   bool do_dst_compress = false;
 
@@ -83,7 +84,7 @@ int Fun4All_G4_sPHENIX(
   gROOT->LoadMacro("G4Setup_sPHENIX.C");
   G4Init(do_svtx,do_preshower,do_cemc,do_hcalin,do_magnet,do_hcalout,do_pipe);
 
-  int absorberactive = 1; // set to 1 to make all absorbers active volumes
+  int absorberactive = 0; // set to 1 to make all absorbers active volumes
   //  const string magfield = "1.5"; // if like float -> solenoidal field in T, if string use as fieldmap name (including path)
   const string magfield = "/phenix/upgrades/decadal/fieldmaps/sPHENIX.2d.root"; // if like float -> solenoidal field in T, if string use as fieldmap name (including path)
   const float magfield_rescale = 1.4/1.5; // scale the map to a 1.4 T field
@@ -93,7 +94,7 @@ int Fun4All_G4_sPHENIX(
   //---------------
 
   Fun4AllServer *se = Fun4AllServer::instance();
-  se->Verbosity(0); 
+  se->Verbosity(1); 
   // just if we set some flags somewhere in this macro
   recoConsts *rc = recoConsts::instance();
   // By default every random number generator uses
@@ -104,7 +105,7 @@ int Fun4All_G4_sPHENIX(
   // this would be:
   //  rc->set_IntFlag("RANDOMSEED",PHRandomSeed());
   // or set it to a fixed value so you can debug your code
-  // rc->set_IntFlag("RANDOMSEED", 12345);
+  //  rc->set_IntFlag("RANDOMSEED", 12345);
 
   //-----------------
   // Event generation
@@ -121,6 +122,29 @@ int Fun4All_G4_sPHENIX(
       // but only if you read HepMC input files
       HepMCNodeReader *hr = new HepMCNodeReader();
       se->registerSubsystem(hr);
+
+      // PHG4SimpleEventGenerator *gen = new PHG4SimpleEventGenerator();
+      // gen->add_particles("pi-",10); // mu+,e+,proton,pi+,Upsilon
+      // gen->add_particles("pi+",10); // mu-,e-,anti_proton,pi-
+      // if (readhepmc) {
+      // 	gen->set_reuse_existing_vertex(true);
+      // 	gen->set_existing_vertex_offset_vector(0.0,0.0,0.0);
+      // } else {
+      // 	gen->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
+      // 					      PHG4SimpleEventGenerator::Uniform,
+      // 					      PHG4SimpleEventGenerator::Uniform);
+      // 	gen->set_vertex_distribution_mean(0.0,0.0,0.0);
+      // 	gen->set_vertex_distribution_width(0.0,0.0,0.0);
+      // }
+      // gen->set_vertex_size_function(PHG4SimpleEventGenerator::Uniform);
+      // gen->set_vertex_size_parameters(0.0,0.0);
+      // gen->set_eta_range(-1.33, 1.33);
+      // gen->set_phi_range(-1.0*TMath::Pi(), 1.0*TMath::Pi());
+      // gen->set_pt_range(0.1, 40.0);
+      // gen->Embed(1);
+      // gen->Verbosity(0);
+      // se->registerSubsystem(gen);     
+      
     }
   else if (runpythia8)
     {
@@ -145,31 +169,11 @@ int Fun4All_G4_sPHENIX(
       HepMCNodeReader *hr = new HepMCNodeReader();
       se->registerSubsystem(hr);
     }
-  else
-    {
+  //else
+  //  {
       // toss low multiplicity dummy events
-      PHG4SimpleEventGenerator *gen = new PHG4SimpleEventGenerator();
-      gen->add_particles("e-",1); // mu+,e+,proton,pi+,Upsilon
-      // gen->add_particles("e+",5); // mu-,e-,anti_proton,pi-
-      if (readhepmc) {
-	gen->set_reuse_existing_vertex(true);
-	gen->set_existing_vertex_offset_vector(0.0,0.0,0.0);
-      } else {
-	gen->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
-					       PHG4SimpleEventGenerator::Uniform,
-					       PHG4SimpleEventGenerator::Uniform);
-	gen->set_vertex_distribution_mean(0.0,0.0,0.0);
-	gen->set_vertex_distribution_width(0.0,0.0,5.0);
-      }
-      gen->set_vertex_size_function(PHG4SimpleEventGenerator::Uniform);
-      gen->set_vertex_size_parameters(0.0,0.0);
-      gen->set_eta_range(-0.5, 0.5);
-      gen->set_phi_range(-1.0*TMath::Pi(), 1.0*TMath::Pi());
-      gen->set_pt_range(0.1, 10.0);
-      gen->Embed(1);
-      gen->Verbosity(0);
-      se->registerSubsystem(gen);
-    }
+
+      //  }
 
   if (!readhits)
     {
@@ -267,6 +271,12 @@ int Fun4All_G4_sPHENIX(
 
   if (do_jet_eval) Jet_Eval("g4jet_eval.root");
 
+  gSystem->Load("libSvtxSimPerformanceCheckReco.so");
+  SvtxSimPerformanceCheckReco *checker = new SvtxSimPerformanceCheckReco();
+  checker->set_nlayers(7);
+  //checker->set_nlayers(63);
+  se->registerSubsystem(checker);
+  
   //-------------- 
   // IO management
   //--------------
@@ -280,9 +290,25 @@ int Fun4All_G4_sPHENIX(
     }
   if (readhepmc)
     {
-      Fun4AllInputManager *in = new Fun4AllHepMCInputManager( "DSTIN");
+      /*
+      Fun4AllHepMCInputManager::VTXFUNC uniform = Fun4AllHepMCInputManager::Uniform;
+      Fun4AllHepMCInputManager *in = new Fun4AllHepMCInputManager("HEPMCIN");
+            in->set_vertex_distribution_function(uniform,uniform,uniform);
+            in->set_vertex_distribution_mean(0.0,0.0,0.0);
+            in->set_vertex_distribution_width(0.0,0.0,0.0); 
       se->registerInputManager( in );
       se->fileopen( in->Name().c_str(), inputFile );
+      */
+
+      Fun4AllHepMCInputManager::VTXFUNC gaus = Fun4AllHepMCInputManager::Gaus;
+      Fun4AllHepMCPileupInputManager *pileup = new Fun4AllHepMCPileupInputManager("PILEUPIN");
+      pileup->set_vertex_distribution_function(gaus,gaus,gaus);
+      pileup->set_vertex_distribution_mean(0.0,0.0,0.0); // cm
+      pileup->set_vertex_distribution_width(0.0,0.0,20.0); // cm    
+      pileup->set_time_window(-18000.0,18000.0);//-18000.0,+18000.0); // ns
+      pileup->set_collision_rate(200); // kHz
+      se->registerInputManager( pileup );
+      se->fileopen( pileup->Name().c_str(), pileupFile );  
     }
   else
     {
@@ -336,7 +362,7 @@ int Fun4All_G4_sPHENIX(
   //-----
   // Exit
   //-----
-
+  se->dumpHistos(outputFile);
   se->End();
   std::cout << "All done" << std::endl;
   delete se;
